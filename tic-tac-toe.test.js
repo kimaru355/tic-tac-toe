@@ -1,4 +1,4 @@
-import ticTacToe from ('./tic-tac-toe');
+const ticTacToe = require('./tic-tac-toe');
 
 function generateNumber (allowedNumbers) {
     let randomNumber = Math.floor(Math.random() * allowedNumbers.length);

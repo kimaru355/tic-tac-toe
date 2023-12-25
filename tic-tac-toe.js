@@ -1,4 +1,10 @@
 let allowedNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+let userSign;
+let pcSign;
+
+function removeUsed (used) {
+    allowedNumbers.splice(allowedNumbers.indexOf(used), 1);
+}
 
 function getPC () {
     while (True) {
@@ -10,14 +16,19 @@ function getPC () {
 }
 
 function playGame (user) {
-    removeUsed(used);
+    removeUsed(user);
     let pc = getPC();
+    removeUsed(pc);
 }
 
 function ticTacToe (user) {
     if (user === 'X') {
+        userSign = 'X';
+        pcSign = 'O';
         return allowedNumbers;
     } else if (user === 'O') {
+        userSign = 'O';
+        pcSign = 'X';
         return allowedNumbers;
     } else if (allowedNumbers.includes(user)) {
         playGame(user);
@@ -26,3 +37,5 @@ function ticTacToe (user) {
         return null;
     }
 }
+
+export default ticTacToe;
