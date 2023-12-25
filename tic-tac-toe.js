@@ -21,6 +21,7 @@ function playGame (user) {
     removeUsed(userSign, user);
     let pc = getPC();
     removeUsed(pcSign, pc);
+    displayBoard();
 }
 
 function ticTacToe (user) {
