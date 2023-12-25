@@ -1,24 +1,26 @@
 let allowedNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+let board = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let userSign;
 let pcSign;
 
-function removeUsed (used) {
-    allowedNumbers.splice(allowedNumbers.indexOf(used), 1);
+function removeUsed (player, choice) {
+    allowedNumbers.splice(allowedNumbers.indexOf(choice), 1);
+    board.splice(board.indexOf(choice), 1, player);
 }
 
 function getPC () {
     while (True) {
         let pc = Math.ceil(Math.random() * 9);
         if (allowedNumbers.includes(pc)) {
-            break;
+            return pc;
         }
     }
 }
 
 function playGame (user) {
-    removeUsed(user);
+    removeUsed(userSign, user);
     let pc = getPC();
-    removeUsed(pc);
+    removeUsed(pcSign, pc);
 }
 
 function ticTacToe (user) {
@@ -38,4 +40,4 @@ function ticTacToe (user) {
     }
 }
 
-export default ticTacToe;
+module.exports = ticTacToe;
