@@ -1,7 +1,15 @@
+const buttons = document.querySelectorAll('.userChoice')
+
 let allowedNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let board = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let userSign;
 let pcSign;
+
+buttons.forEach(userChoice => {
+    addEventListener('click', () => {
+        ticTacToe(userChoice.id);
+    })
+})
 
 function removeUsed (player, choice) {
     allowedNumbers.splice(allowedNumbers.indexOf(choice), 1);
@@ -33,7 +41,7 @@ function ticTacToe (user) {
         userSign = 'O';
         pcSign = 'X';
         return allowedNumbers;
-    } else if (allowedNumbers.includes(user)) {
+    } else if (allowedNumbers.includes(+user)) {
         playGame(user);
         return allowedNumbers;
     } else {
