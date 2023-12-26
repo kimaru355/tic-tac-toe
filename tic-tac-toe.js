@@ -1,13 +1,38 @@
-const buttons = document.querySelectorAll('.userChoice')
+const buttons = document.querySelectorAll('.userChoice');
+const displayActions = document.querySelector('#displayActions');
 
 let allowedNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let board = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let userSign;
 let pcSign;
 
+function createElement(element) {
+    return document.createElement(element);
+}
+
 buttons.forEach(userChoice => {
-    addEventListener('click', () => {
-        ticTacToe(userChoice.id);
+    userChoice.addEventListener('click', () => {
+        if (userChoice.id === 'X') {
+            let checkChosen = document.querySelector('#O');
+            if (checkChosen.classList.contains('bg-green-300')) {
+                checkChosen.classList.toggle('bg-green-300');
+                userSign = 'X';
+                pcSign = 'O';
+                userChoice.classList.toggle('bg-green-300');
+            }
+        } else if (userChoice.id === 'O') {
+            let checkChosen = document.querySelector('#X');
+            if (checkChosen.classList.contains('bg-green-300')) {
+                checkChosen.classList.toggle('bg-green-300');
+                userSign = 'O';
+                pcSign = 'X';
+                userChoice.classList.toggle('bg-green-300');
+            }
+        }
+        // let p = createElement('p');
+        // p.textContent = `You clicked ${userChoice.id}`;
+        // displayActions.appendChild(p);
+        // ticTacToe(userChoice.id);
     })
 })
 
@@ -33,15 +58,7 @@ function playGame (user) {
 }
 
 function ticTacToe (user) {
-    if (user === 'X') {
-        userSign = 'X';
-        pcSign = 'O';
-        return allowedNumbers;
-    } else if (user === 'O') {
-        userSign = 'O';
-        pcSign = 'X';
-        return allowedNumbers;
-    } else if (allowedNumbers.includes(+user)) {
+    if (allowedNumbers.includes(+user)) {
         playGame(user);
         return allowedNumbers;
     } else {
