@@ -58,7 +58,7 @@ function playGame (user) {
 }
 
 function ticTacToe (user) {
-    if (allowedNumbers.includes(+user)) {
+    if (allowedNumbers.includeNs(+user)) {
         playGame(user);
         return allowedNumbers;
     } else {
