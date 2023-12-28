@@ -25,15 +25,15 @@ class Board {
     }
 
     add (choice) {
-        console.log(`Choices: ${this.allowedChoices}`);
-        console.log(`User chose: ${choice}`);
+        // console.log(`Choices: ${this.allowedChoices}`);
+        // console.log(`User chose: ${choice}`);
         this.userChoices.push(choice);
         this.allowedChoices.splice(this.allowedChoices.indexOf(choice), 1);
         this.checkWin();
         this.pcChoices.push(this.playPC());
         this.checkWin();
-        console.log(`User choices: ${this.userChoices}`);
-        console.log(`PC choices: ${this.pcChoices}`);
+        // console.log(`User choices: ${this.userChoices}`);
+        // console.log(`PC choices: ${this.pcChoices}`);
     }
 
     checkWin () {
