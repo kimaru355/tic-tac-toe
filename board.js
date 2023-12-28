@@ -78,10 +78,10 @@ class Board {
 }
 
 class AdvancedBoard extends Board {
-    //
+    // TODO: increase difficulty
 }
 
-game = new Board();
+let game = new Board();
 while (true) {
     let choices = game.getChoices();
     // console.log(`Choices: ${choices}`);
@@ -95,4 +95,4 @@ while (true) {
     }
 }
 
-module.exports = Board;
+export default Board;
