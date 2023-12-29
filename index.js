@@ -88,6 +88,7 @@ buttons.forEach((userChoice) => {
         }
         let choices = game.getChoices();
         if (choices.includes(+userChoice.id)) {
+            userChoice.classList.add('text-4xl')
             userChoice.textContent = 'X';
             game.add(+userChoice.id);
             choices.splice(choices.indexOf(+userChoice.id), 1);
