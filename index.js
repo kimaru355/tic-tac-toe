@@ -16,12 +16,12 @@ class Board {
             choice = Math.ceil(Math.random() * 9);
             if (this.allowedChoices.includes(choice)) {
                 this.pcChoice = choice;
+                this.pcChoices.push(choice);
                 // console.log(`PC chose: ${choice}`);
                 break;
             }
         }
         this.allowedChoices.splice(this.allowedChoices.indexOf(choice), 1);
-        return choice;
     }
 
     getChoices () {
@@ -33,45 +33,45 @@ class Board {
         // console.log(`User chose: ${choice}`);
         this.userChoices.push(choice);
         this.allowedChoices.splice(this.allowedChoices.indexOf(choice), 1);
-        this.checkWin();
-        this.pcChoices.push(this.playPC());
-        this.checkWin();
-        // console.log(`User choices: ${this.userChoices}`);
-        // console.log(`PC choices: ${this.pcChoices}`);
+        this.checkWin('user');
+        this.playPC();
+        this.checkWin('pc');
+        console.log(`User choices: ${this.userChoices}`);
+        console.log(`PC choices: ${this.pcChoices}`);
     }
 
-    checkWin () {
+    checkWin (player) {
         let counter = 0;
+        console.log(player);
         this.gameWon.forEach((win) => {
-            this.userChoices.forEach((choice) => {
+            if (player === 'user') {
                 counter = 0;
-                if (win.includes(choice)) {
-                    counter++;
+                this.userChoices.forEach((choice) => {
+                    if (win.includes(choice)) {
+                        counter += 1;
+                        console.log(`${choice} is in ${win} counter: ${counter}`);
+                    }
+                })
+                if (counter === 3) {
+                    this.won = true;
+                    alert('You won!');
+                    this.reset();
                 }
-            })
-            if (counter === 3) {
-                this.won('user');
-            }
-            this.pcChoices.forEach((choice) => {
+            } else if (player === 'pc') {
                 counter = 0;
-                if (win.includes(choice)) {
-                    counter++;
+                this.pcChoices.forEach((choice) => {
+                    if (win.includes(choice)) {
+                        counter += 1;
+                        console.log(`${choice} is in ${win} counter: ${counter}`);
+                    }
+                })
+                if (counter === 3) {
+                    this.won = true;
+                    alert('You lost!');
+                    this.reset();
                 }
-            })
-            if (counter === 3) {
-                this.won('pc');
             }
         })
-    }
-
-    won (winner) {
-        if (winner === 'user') {
-            console.log("You won!");
-        } else {
-            console.log("You lost!");
-        }
-        this.won = true;
-        this.reset();
     }
 
     reset () {
@@ -86,6 +86,10 @@ let game = new Board();
 buttons.forEach((userChoice) => {
     userChoice.addEventListener('click', () => {
         if (userChoice.textContent !== '') {
+            return;
+        }
+        if (game.won) {
+            alert('Game over!');
             return;
         }
         let choices = game.getChoices();
