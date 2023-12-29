@@ -5,6 +5,7 @@ class Board {
         this.gameWon = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], [3,5,7]];
         this.userChoices = [];
         this.pcChoices = [];
+        this.pcChoice = 0;
         this.allowedChoices = [1,2,3,4,5,6,7,8,9];
         this.won = false;
     }
@@ -14,6 +15,7 @@ class Board {
         while (true) {
             choice = Math.ceil(Math.random() * 9);
             if (this.allowedChoices.includes(choice)) {
+                this.pcChoice = choice;
                 console.log(`PC chose: ${choice}`);
                 break;
             }
@@ -87,18 +89,16 @@ buttons.forEach((userChoice) => {
             return;
         }
         let choices = game.getChoices();
+        console.log(game.getChoices());
+        console.log(`You chose ${userChoice.id}`)
         if (choices.includes(+userChoice.id)) {
             userChoice.classList.add('text-4xl')
             userChoice.textContent = 'X';
             game.add(+userChoice.id);
-            choices.splice(choices.indexOf(+userChoice.id), 1);
-            choices.forEach((choice) => {
-                let remChoices = game.getChoices();
-                if (!remChoices.includes(choice)) {
-                    let pcChoice = document.querySelector(`#${choice}`);
-                    pcChoice.textContent = 'O';
-                }
-            });
+            console.log(game.pcChoice);
+            let showPcChoice = document.getElementById(game.pcChoice);
+            showPcChoice.classList.add('text-4xl');
+            showPcChoice.textContent = 'O';
         }
     });
 });
