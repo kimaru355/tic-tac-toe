@@ -16,7 +16,7 @@ class Board {
             choice = Math.ceil(Math.random() * 9);
             if (this.allowedChoices.includes(choice)) {
                 this.pcChoice = choice;
-                console.log(`PC chose: ${choice}`);
+                // console.log(`PC chose: ${choice}`);
                 break;
             }
         }
@@ -89,13 +89,13 @@ buttons.forEach((userChoice) => {
             return;
         }
         let choices = game.getChoices();
-        console.log(game.getChoices());
-        console.log(`You chose ${userChoice.id}`)
+        // console.log(game.getChoices());
+        // console.log(`You chose ${userChoice.id}`)
         if (choices.includes(+userChoice.id)) {
             userChoice.classList.add('text-4xl')
             userChoice.textContent = 'X';
             game.add(+userChoice.id);
-            console.log(game.pcChoice);
+            // console.log(game.pcChoice);
             let showPcChoice = document.getElementById(game.pcChoice);
             showPcChoice.classList.add('text-4xl');
             showPcChoice.textContent = 'O';
