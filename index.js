@@ -1,4 +1,5 @@
 const buttons = document.querySelectorAll('.userChoice');
+const modeButtons = document.querySelectorAll('a');
 
 class Board {
     constructor () {
@@ -18,20 +19,13 @@ class Board {
             if (this.allowedChoices.includes(choice)) {
                 this.pcChoice = choice;
                 this.pcChoices.push(choice);
-                // console.log(`PC chose: ${choice}`);
                 break;
             }
         }
         this.allowedChoices.splice(this.allowedChoices.indexOf(choice), 1);
     }
 
-    getChoices () {
-        return this.allowedChoices;
-    }
-
     add (choice) {
-        // console.log(`Choices: ${this.allowedChoices}`);
-        // console.log(`User chose: ${choice}`);
         this.userChoices.push(choice);
         this.allowedChoices.splice(this.allowedChoices.indexOf(choice), 1);
         this.checkWin('user');
@@ -40,8 +34,6 @@ class Board {
         }
         this.playPC();
         this.checkWin('pc');
-        // console.log(`User choices: ${this.userChoices}`);
-        // console.log(`PC choices: ${this.pcChoices}`);
     }
 
     checkWin (player) {
@@ -52,7 +44,6 @@ class Board {
                 this.userChoices.forEach((choice) => {
                     if (win.includes(choice)) {
                         counter += 1;
-                        // console.log(`${choice} is in ${win} counter: ${counter}`);
                     }
                 })
                 if (counter === 3) {
@@ -64,7 +55,6 @@ class Board {
                 this.pcChoices.forEach((choice) => {
                     if (win.includes(choice)) {
                         counter += 1;
-                        // console.log(`${choice} is in ${win} counter: ${counter}`);
                     }
                 })
                 if (counter === 3) {
@@ -85,10 +75,85 @@ class Board {
     }
 }
 
+class AdvancedBoard extends Board {
+    constructor() {
+        super();
+        this.mode = 'baby';
+    }
+
+    add (choice) {
+        this.userChoices.push(choice);
+        this.allowedChoices.splice(this.allowedChoices.indexOf(choice), 1);
+        this.advancedCheckWin();
+    }
+
+    blockWin (choice) {
+        this.pcChoice = choice;
+        this.pcChoices.push(choice);
+        this.allowedChoices.splice(this.allowedChoices.indexOf(choice), 1);
+    }
+
+    advancedCheckWin () {
+        let counter = 0;
+        let notCounted = 0;
+        let resolved = false;
+        this.gameWon.forEach((win) => {
+            if (resolved === true) {
+                return;
+            }
+            counter = 0;
+            this.userChoices.forEach((choice) => {
+                if (win.includes(choice)) {
+                    counter += 1;
+                }
+            })
+            if (counter === 3) {
+                resolved = true;
+                this.winner = 'user';
+                this.won = true;
+            } else if (counter === 2 && this.allowedChoices.length !== 0) {
+                win.forEach((choice) => {
+                    if (!this.userChoices.includes(choice)) {
+                        notCounted = choice;
+                    }
+                });
+                if (this.allowedChoices.includes(notCounted)) {
+                    resolved = true;
+                    this.blockWin(notCounted);
+                }
+            } else if (this.allowedChoices.length === 0) {
+                resolved = true;
+                this.won = true;
+                this.winner = 'draw';
+            }
+        });
+        if (resolved === false) {
+            this.playPC();
+            this.checkWin('pc');
+        }
+    }
+}
+
 let game = new Board();
 
+modeButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+        let activeMode = document.querySelector('.active');
+        activeMode.classList.remove('active');
+        activeMode.classList.remove('border-4', 'border-white');
+        activeMode.classList.add('border', 'border-slate-500');
+        button.classList.add('active');
+        button.classList.remove('border', 'border-slate-500');
+        button.classList.add('border-4', 'border-white');
+        if (button.id !== 'baby') {
+            game = new AdvancedBoard();
+        } else {
+            game = new Board();
+        }
+    });
+});
+
 function newGame () {
-    // console.log(this.winner)
     let div = document.createElement('div');
     let p = document.createElement('p');
     let main = document.querySelector('main');
@@ -98,7 +163,7 @@ function newGame () {
     p.classList.add('text-5xl', 'text-white');
     closeButton.classList.add('bg-green-500', 'text-white', 'p-2', 'rounded', 'mt-4', 'text-2xl');
 
-    if (game.winner !== '') {
+    if (game.winner !== 'draw') {
         p.textContent = game.winner === 'user' ? 'You won!' : 'You lost';
     } else {
         p.textContent = "It's a tie!";
@@ -122,22 +187,16 @@ buttons.forEach((userChoice) => {
         if (userChoice.textContent !== '') {
             return;
         }
-        let choices = game.getChoices();
-        // console.log(game.getChoices());
-        // console.log(`You chose ${userChoice.id}`)
-        if (choices.includes(+userChoice.id)) {
-            userChoice.textContent = 'X';
-            game.add(+userChoice.id);
-            if (game.winner === 'user' || game.allowedChoices.length === 0) {
-                newGame();
-                return;
-            }
-            // console.log(game.pcChoice);
-            let showPcChoice = document.getElementById(game.pcChoice);
-            showPcChoice.textContent = 'O';
-            if (game.won) {
-                newGame();
-            }
+        userChoice.textContent = 'X';
+        game.add(+userChoice.id);
+        if (game.winner === 'user' || game.winner === 'draw' || game.allowedChoices.length === 0) {
+            newGame();
+            return;
+        }
+        let showPcChoice = document.getElementById(game.pcChoice);
+        showPcChoice.textContent = 'O';
+        if (game.won) {
+            newGame();
         }
     });
 });
