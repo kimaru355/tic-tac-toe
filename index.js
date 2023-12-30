@@ -103,11 +103,14 @@ function newGame () {
     div.appendChild(closeButton);
     main.appendChild(div);
 
-    // buttons.forEach((button) => {
-    //     button.textContent = '';
-    //     button.classList.remove('text-4xl');
-    // });
-    // game.reset();
+    closeButton.addEventListener('click', () => {
+        main.removeChild(div);
+        buttons.forEach((button) => {
+            button.textContent = '';
+            button.classList.remove('text-4xl');
+        });
+        game.reset();
+    });
 }
 
 buttons.forEach((userChoice) => {
