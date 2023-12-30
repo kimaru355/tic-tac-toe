@@ -36,13 +36,10 @@ class Board {
         this.allowedChoices.splice(this.allowedChoices.indexOf(choice), 1);
         this.checkWin('user');
         if (this.won) {
-            this.winner = 'user';
+            return;
         }
         this.playPC();
         this.checkWin('pc');
-        if (this.won) {
-            this.winner = 'pc';
-        }
         // console.log(`User choices: ${this.userChoices}`);
         // console.log(`PC choices: ${this.pcChoices}`);
     }
@@ -59,6 +56,7 @@ class Board {
                     }
                 })
                 if (counter === 3) {
+                    this.winner = 'user';
                     this.won = true;
                 }
             } else if (player === 'pc') {
@@ -70,6 +68,7 @@ class Board {
                     }
                 })
                 if (counter === 3) {
+                    this.winner = 'pc';
                     this.won = true;
                 }
             }
