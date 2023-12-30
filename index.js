@@ -35,7 +35,7 @@ class Board {
         this.userChoices.push(choice);
         this.allowedChoices.splice(this.allowedChoices.indexOf(choice), 1);
         this.checkWin('user');
-        if (this.won) {
+        if (this.won || this.allowedChoices.length === 0) {
             return;
         }
         this.playPC();
@@ -78,16 +78,17 @@ class Board {
     reset () {
         this.userChoices = [];
         this.pcChoices = [];
+        this.pcChoice = 0;
         this.allowedChoices = [1,2,3,4,5,6,7,8,9];
         this.won = false;
-        this.pcChoice = 0;
+        this.winner = '';
     }
 }
 
 let game = new Board();
 
 function newGame () {
-    alert(game.winner);
+    // console.log(this.winner)
     let div = document.createElement('div');
     let p = document.createElement('p');
     let main = document.querySelector('main');
@@ -97,7 +98,11 @@ function newGame () {
     p.classList.add('text-5xl', 'text-white');
     closeButton.classList.add('bg-green-500', 'text-white', 'p-2', 'rounded', 'mt-4', 'text-2xl');
 
-    p.textContent = game.winner === 'user' ? 'You won!' : 'You lost';
+    if (game.winner !== '') {
+        p.textContent = game.winner === 'user' ? 'You won!' : 'You lost';
+    } else {
+        p.textContent = "It's a tie!";
+    }
     closeButton.textContent = 'Close';
     div.appendChild(p);
     div.appendChild(closeButton);
@@ -107,7 +112,6 @@ function newGame () {
         main.removeChild(div);
         buttons.forEach((button) => {
             button.textContent = '';
-            button.classList.remove('text-4xl');
         });
         game.reset();
     });
@@ -122,16 +126,14 @@ buttons.forEach((userChoice) => {
         // console.log(game.getChoices());
         // console.log(`You chose ${userChoice.id}`)
         if (choices.includes(+userChoice.id)) {
-            userChoice.classList.add('text-4xl')
             userChoice.textContent = 'X';
             game.add(+userChoice.id);
-            if (game.won) {
+            if (game.winner === 'user' || game.allowedChoices.length === 0) {
                 newGame();
                 return;
             }
             // console.log(game.pcChoice);
             let showPcChoice = document.getElementById(game.pcChoice);
-            showPcChoice.classList.add('text-4xl');
             showPcChoice.textContent = 'O';
             if (game.won) {
                 newGame();
